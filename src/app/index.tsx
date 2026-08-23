@@ -1,33 +1,37 @@
-import { StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import { useState } from 'react';
+import { Text, View, TextInput } from 'react-native';
 
 export default function HomeScreen() {
+  const [quantAlunos, setQuantAlunos] = useState('');
+  const [quantGrupos, setQuantGrupos] = useState('');
   return (
-    <View className="flex-1 items-center justify-center bg-slate-100 p-4">
-      <View className="bg-slate-800 p-6 rounded-2xl border border-slate-700 w-full max-w-sm">
-        <Text className="text-white text-xl font-bold text-center">
-          React Native + NativeWind
+    <View className="flex-1 items-center justify-center bg-slate-900 p-4">
+      <View className='bg-emerald-400 rounded-xl p-4 w-full max-w-sm items-center'>
+        <Text className='text-slate-100 text-2xl mt-8'>
+          Quantos alunos?
         </Text>
-        <Text className="text-slate-400 text-sm text-center mt-2">
-          Estilização rápida com classes utilitárias no mobile.
+        <TextInput
+          className='bg-slate-700 mt-4 rounded-xl border border-slate-600 w-16 text-slate-100 text-xl text-center'
+          cursorColor={'#f1f5f9'}
+          maxLength={2}
+          inputMode='numeric'
+          value={quantAlunos}
+          onChangeText={setQuantAlunos}
+        />
+        <Text className='text-slate-100 text-2xl mt-8'>
+          Quantos grupos?
         </Text>
-        <TouchableOpacity className="mt-4 bg-emerald-500 py-3 rounded-xl active:bg-emerald-600">
-          <Text className="text-white font-semibold text-center">Clique Aqui</Text>
-        </TouchableOpacity>
+        <TextInput
+          className='bg-slate-700 mt-4 rounded-xl border border-slate-600 w-16 text-slate-100 text-xl text-center'
+          cursorColor={'#f1f5f9'}
+          maxLength={2}
+          inputMode='numeric'
+          value={quantGrupos}
+          onChangeText={setQuantGrupos}
+        />
       </View>
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'black',
-    justifyContent: 'center',
-    alignItems:'center',
-    flexDirection: 'row',
-  }, 
-  texto: {
-    color:'white'
-  }
-  
-});
+
