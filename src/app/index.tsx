@@ -7,17 +7,40 @@ export default function HomeScreen() {
   const [listaExcluidos, setListaExcluidos] = useState('');
 
   const formarGrupos = (qtdAlunos: string, qntGrupos: string, excluidos: string) => {
-    console.log('qtdAlunos,qntGrupos,listaExcluidos', qtdAlunos, qntGrupos, excluidos);
+    const alunos = parseInt(quantAlunos, 10);
+    const grupos = parseInt(quantGrupos, 10);
 
+    //converte string em uma lista somente com números
     const listafatiada = excluidos.split(',');
-    const listaConvertida = listafatiada.map(num => parseInt(num.trim(),10))
-    const resListaExcluidos = listaConvertida.filter(num => !isNaN(num)) 
-    console.log('resListaExcluidos', resListaExcluidos);
+    const listaConvertida = listafatiada.map(num => parseInt(num.trim(), 10))
+    const resultListaExcluidos = listaConvertida.filter(num => !isNaN(num))
 
-    const listaOrdenada = Array.from({length:parseInt(quantAlunos,10)},(_,idx)=>idx+1);
-    console.log('listaOrdenada', listaOrdenada);
-    
+    //cria uma lista ordenada e exclui aqueles marcados para exclusão
+    const listaOrdenada = Array.from({ length: alunos }, (_, idx) => idx + 1)
+      .filter(num => !resultListaExcluidos.includes(num));
 
+    //embaralhamento dos números
+    for (let i = listaOrdenada.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [listaOrdenada[i], listaOrdenada[j]] = [listaOrdenada[j], listaOrdenada[i]];
+    }
+
+    //monta as fatias dos grupos
+    const tamanhoBase = Math.floor(listaOrdenada.length / grupos)
+    const resto = listaOrdenada.length % grupos;
+
+    const listaPronta: number[][] = []
+    let indiceAtual = 0;
+
+    for (let i = 0; i < grupos; i++) {
+      const tamDoGrupo = tamanhoBase + (i < resto ? 1 : 0);
+      console.log('tamDoGrupo', tamDoGrupo);
+      const fatia = listaOrdenada.slice(indiceAtual, indiceAtual + tamDoGrupo);
+      listaPronta.push(fatia);
+      indiceAtual += tamDoGrupo;
+    }
+
+    console.log('listaPronta',listaPronta);
   };
 
   const handleExcluidos = (text: string) => {
@@ -26,13 +49,13 @@ export default function HomeScreen() {
   };
 
   const handleAlunos = (text: string) => {
-    const quantiaNormatizada = text.replace(/[^0-9]/g, '');
-    setQuantAlunos(quantiaNormatizada);
+    if (text === '0') return setQuantAlunos(text.replace(/[0]/, ''));
+    setQuantAlunos(text.replace(/[^0-9]/g, ''));
   };
 
   const handleGrupos = (text: string) => {
-    const quantiaNormatizada = text.replace(/[^0-9]/g, '');
-    setQuantGrupos(quantiaNormatizada);
+    if (text === '0') return setQuantGrupos(text.replace(/[0]/, ''));
+    setQuantGrupos(text.replace(/[^0-9]/g, ''));
   };
 
   return (
@@ -62,7 +85,7 @@ export default function HomeScreen() {
               maxLength={2}
               inputMode='numeric'
               value={quantGrupos}
-              onChangeText={setQuantGrupos}
+              onChangeText={handleGrupos}
             />
           </View>
         </View>
@@ -74,7 +97,7 @@ export default function HomeScreen() {
           cursorColor={'#f1f5f9'}
           keyboardType="numbers-and-punctuation"
           inputMode="text"
-          placeholder='Separar por vírgula ex. 3,7,26'
+          placeholder='Separar por vírgula ex.: 3,7,26'
           placeholderTextColor={'#94a3b8'}
           value={listaExcluidos}
           onChangeText={handleExcluidos}
