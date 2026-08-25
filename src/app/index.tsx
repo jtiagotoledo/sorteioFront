@@ -6,16 +6,34 @@ export default function HomeScreen() {
   const [quantGrupos, setQuantGrupos] = useState('');
   const [listaExcluidos, setListaExcluidos] = useState('');
 
-  const formarGrupos = (qtdAlunos: string, qntGrupos: string, listaExcluidos: string) => {
-    console.log('qtdAlunos,qntGrupos,listaExcluidos', qtdAlunos, qntGrupos, listaExcluidos);
-  }
+  const formarGrupos = (qtdAlunos: string, qntGrupos: string, excluidos: string) => {
+    console.log('qtdAlunos,qntGrupos,listaExcluidos', qtdAlunos, qntGrupos, excluidos);
 
-  const handleExcluidos = (text:string)=>{
+    const listafatiada = excluidos.split(',');
+    const listaConvertida = listafatiada.map(num => parseInt(num.trim(),10))
+    const resListaExcluidos = listaConvertida.filter(num => !isNaN(num)) 
+    console.log('resListaExcluidos', resListaExcluidos);
+
+    const listaOrdenada = Array.from({length:parseInt(quantAlunos,10)},(_,idx)=>idx+1);
+    console.log('listaOrdenada', listaOrdenada);
+    
+
+  };
+
+  const handleExcluidos = (text: string) => {
     const listaNormatizada = text.replace(/[^0-9,]/g, '');
     setListaExcluidos(listaNormatizada);
-    console.log('listaExcluidos', listaExcluidos);
-    
-  }
+  };
+
+  const handleAlunos = (text: string) => {
+    const quantiaNormatizada = text.replace(/[^0-9]/g, '');
+    setQuantAlunos(quantiaNormatizada);
+  };
+
+  const handleGrupos = (text: string) => {
+    const quantiaNormatizada = text.replace(/[^0-9]/g, '');
+    setQuantGrupos(quantiaNormatizada);
+  };
 
   return (
     <View className="flex-1 items-center bg-slate-900 p-4">
@@ -31,7 +49,7 @@ export default function HomeScreen() {
               maxLength={2}
               inputMode='numeric'
               value={quantAlunos}
-              onChangeText={setQuantAlunos}
+              onChangeText={handleAlunos}
             />
           </View>
           <View >
