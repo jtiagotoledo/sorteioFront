@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Text, View, TextInput, Pressable, FlatList, ScrollView } from 'react-native';
+import { Text, View, TextInput, Pressable, FlatList, Keyboard } from 'react-native';
 
 export default function HomeScreen() {
   const [quantAlunos, setQuantAlunos] = useState('');
@@ -9,8 +9,14 @@ export default function HomeScreen() {
 
 
   const formarGrupos = (qtdAlunos: string, qntGrupos: string, excluidos: string) => {
+    Keyboard.dismiss();
+    setQuantAlunos('');
+    setQuantGrupos('');
+    setListaExcluidos('');
+    
     const alunos = parseInt(quantAlunos, 10);
     const grupos = parseInt(quantGrupos, 10);
+
 
     //converte string em uma lista somente com números
     const listafatiada = excluidos.split(',');
