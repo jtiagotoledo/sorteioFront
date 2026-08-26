@@ -1,10 +1,12 @@
 import { useState } from 'react';
-import { Text, View, TextInput, Pressable } from 'react-native';
+import { Text, View, TextInput, Pressable, FlatList, ScrollView } from 'react-native';
 
 export default function HomeScreen() {
   const [quantAlunos, setQuantAlunos] = useState('');
   const [quantGrupos, setQuantGrupos] = useState('');
   const [listaExcluidos, setListaExcluidos] = useState('');
+  const [listaGrupos, setListaGrupos] = useState<number[][]>([]);
+
 
   const formarGrupos = (qtdAlunos: string, qntGrupos: string, excluidos: string) => {
     const alunos = parseInt(quantAlunos, 10);
@@ -40,7 +42,9 @@ export default function HomeScreen() {
       indiceAtual += tamDoGrupo;
     }
 
-    console.log('listaPronta',listaPronta);
+    setListaGrupos(listaPronta)
+
+    console.log('listaPronta', listaPronta);
   };
 
   const handleExcluidos = (text: string) => {
@@ -56,6 +60,25 @@ export default function HomeScreen() {
   const handleGrupos = (text: string) => {
     if (text === '0') return setQuantGrupos(text.replace(/[0]/, ''));
     setQuantGrupos(text.replace(/[^0-9]/g, ''));
+  };
+
+  const renderItemLista = ({ item, index }: { item: number[], index: number }) => {
+    console.log('item,index', item, index);
+
+    return (
+      <View className='bg-slate-500 flex-row min-h-20 rounded-md p-4 items-center'>
+        <Text className='text-xl mr-6 text-slate-100'>Grupo: {index + 1}</Text>
+        <View className=' flex-1 flex-row flex-wrap gap-3 items-center'>
+          {item.map((aluno) => (
+            <View className='bg-teal-500 border border-slate-900 h-12 w-12 rounded-xl justify-center items-center' key={`${aluno}`}>
+              <Text className=' text-xl text-slate-100'>
+                {aluno}
+              </Text>
+            </View>
+          ))}
+        </View>
+      </View>
+    );
   };
 
   return (
@@ -109,6 +132,13 @@ export default function HomeScreen() {
           <Text className='text-slate-100 font-bold text-xl '>Gerar Grupos</Text>
         </Pressable>
       </View>
+      <FlatList
+        className='mt-6  mb-16 w-full'
+        contentContainerClassName="gap-1"
+        data={listaGrupos}
+        keyExtractor={(_, index) => `${index}`}
+        renderItem={renderItemLista}
+      />
     </View>
   );
 }
