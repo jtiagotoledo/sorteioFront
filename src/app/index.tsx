@@ -13,7 +13,7 @@ export default function HomeScreen() {
     setQuantAlunos('');
     setQuantGrupos('');
     setListaExcluidos('');
-    
+
     const alunos = parseInt(quantAlunos, 10);
     const grupos = parseInt(quantGrupos, 10);
 
@@ -144,6 +144,11 @@ export default function HomeScreen() {
         data={listaGrupos}
         keyExtractor={(_, index) => `${index}`}
         renderItem={renderItemLista}
+        ListEmptyComponent={
+          <Text className="text-slate-500 text-center mt-20 justify-center">
+            Nenhum grupo gerado ainda.
+          </Text>
+        }
       />
     </View>
   );
